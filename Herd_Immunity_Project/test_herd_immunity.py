@@ -13,3 +13,6 @@ def test_init_Person():
     assert person.is_vaccinated == True
     assert person.infected == ebola
     assert person2.infected == None
+
+def test_did_survive_infection():
+    assert random_num == 0.34

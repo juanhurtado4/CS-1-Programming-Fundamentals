@@ -42,16 +42,17 @@ class Person(object):
     '''
 
     def __init__(self, _id, is_vaccinated, infected=None):
-        # TODO:  Finish this method.  Follow the instructions in the class documentation
-        # to set the corret values for the following attributes.
-        self._id = None
-        self.is_vaccinated = None
-        self.is_alive = None
-        self.infected = None
+        # Finished (TODO):  Finish this method.  Follow the instructions in the class documentation
+        # to set the corret values for the following attributes
+        self._id = _id
+        self.is_vaccinated = is_vaccinated
+        self.is_alive = True
+        self.infected = infected
 
 
     def did_survive_infection():
         # TODO:  Finish this method. Follow the instructions in the class documentation
         # for resolve_infection.  If person dies, set is_alive to False and return False.
-        # If person lives, set is_vaccinated = True, infected = None, return True.  
-        pass
+        # If person lives, set is_vaccinated = True, infected = None, return True.
+        # random_num = float('{0:.2f}'.format(random.random()))
+        random_num = float('{0:.2f}'.format(0.34532452345))
