@@ -6,7 +6,7 @@ import pytest
 # def __init__(self, _id, is_vaccinated, infected=None):
 
 def test_init_Person():
-    ebola = Virus('ebola')
+    ebola = Virus('ebola', 0.7)
     person = Person(1, True, ebola)
     person2 = Person(2, True)
     assert person._id == 1
@@ -15,4 +15,6 @@ def test_init_Person():
     assert person2.infected == None
 
 def test_did_survive_infection():
-    assert random_num == 0.34
+    hiv = Virus('hiv', 0.012)
+    person = Person(3, False, hiv)
+    assert person.did_survive_infection() == True
