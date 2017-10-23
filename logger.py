@@ -92,7 +92,7 @@ class Logger(object):
         if did_infect == None:
             log = '{}\tinfects\t{}\n'.format(person1._id, person2._id)
         else:
-            log = '{}\tdid not infect\t{}\n'.format(person1._id, person2._id)
+            log = '{}\tdid\tnot\tinfect\t{}\n'.format(person1._id, person2._id)
 
         with open(self.file_name, 'a') as file:
             file.write(log)
@@ -107,9 +107,9 @@ class Logger(object):
         # NOTE: Make sure to end every line with a '/n' character to ensure that each
         # event logged ends up on a separate line!
         if person.is_alive:
-            log = '{}\tsurvived infection\n'.format(person._id)
+            log = '{}\tsurvived\tinfection\n'.format(person._id)
         else:
-            log = '{}\tdied from infection\n'.format(person._id)
+            log = '{}\tdied\tfrom\tinfection\n'.format(person._id)
 
         with open(self.file_name, 'a') as file:
             file.write(log)
@@ -123,6 +123,6 @@ class Logger(object):
         # to compute these statistics for you, as a Logger's job is just to write logs!
         # NOTE: Make sure to end every line with a '/n' character to ensure that each
         # event logged ends up on a separate line!
-        log = "Time step {time_step_number} ended, beginning {time_step_number_plus}..."
+        log = "Time\tstep\t{time_step_number}\tended\tbeginning\t{time_step_number_plus}...\n"
         with open(self.file_name, 'a') as file:
             file.write(log.format(time_step_number=time_step_number, time_step_number_plus=time_step_number + 1))
