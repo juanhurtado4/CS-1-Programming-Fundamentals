@@ -123,4 +123,6 @@ class Logger(object):
         # to compute these statistics for you, as a Logger's job is just to write logs!
         # NOTE: Make sure to end every line with a '/n' character to ensure that each
         # event logged ends up on a separate line!
-        pass
+        log = "Time step {time_step_number} ended, beginning {time_step_number_plus}..."
+        with open(self.file_name, 'a') as file:
+            file.write(log.format(time_step_number=time_step_number, time_step_number_plus=time_step_number + 1))
