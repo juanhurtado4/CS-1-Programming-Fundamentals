@@ -198,6 +198,7 @@ class Simulation(object):
         #   - Set this Person's .infected attribute to True.
         # NOTE: Once you have iterated through the entire list of self.newly_infected, remember
         # to reset self.newly_infected back to an empty list!
+        pass
 
 if __name__ == "__main__":
     params = sys.argv[1:]
