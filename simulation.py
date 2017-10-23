@@ -83,6 +83,7 @@ class Simulation(object):
         self.file_name = "{}_simulation_pop_{}_vp_{}_infected_{}.txt".format(
             self.virus_name, population_size, vacc_percentage, self.initial_infected)
 
+        # COMPLETED
         # TODO: Create a Logger object and bind it to self.logger.  You should use this
         # logger object to log all events of any importance during the simulation.  Don't forget
         # to call these logger methods in the corresponding parts of the simulation!
@@ -99,6 +100,7 @@ class Simulation(object):
         self.population.append(self._create_population(self.initial_infected))
 
     def _create_population(self, initial_infected):
+        # COMPLETED
         # TODO: Finish this method!  This method should be called when the simulation
         # begins, to create the population that will be used. This method should return
         # an array filled with Person objects that matches the specifications of the
@@ -137,6 +139,7 @@ class Simulation(object):
         return population
 
     def _simulation_should_continue(self):
+        # COMPLETED
         # TODO: Complete this method!  This method should return True if the simulation
         # should continue, or False if it should not.  The simulation should end under
         # any of the following circumstances:
@@ -164,12 +167,15 @@ class Simulation(object):
         time_step_counter = 0
         # TODO: Remember to set this variable to an intial call of
         # self._simulation_should_continue()!
-        should_continue = None
+        should_continue = self._simulation_should_continue()
         while should_continue:
         # TODO: for every iteration of this loop, call self.time_step() to compute another
         # round of this simulation.  At the end of each iteration of this loop, remember
         # to rebind should_continue to another call of self._simulation_should_continue()!
-            pass
+            self.time_step
+            time_step_counter += 1
+            self.logger.log_time_step(time_step_counter)
+            should_continue = self._simulation_should_continue()
         print('The simulation has ended after {time_step_counter} turns.'.format(time_step_counter))
 
     def time_step(self):
