@@ -2,6 +2,7 @@ import random, sys
 random.seed(42)
 from person import Person
 from logger import Logger
+from virus import Virus
 
 class Simulation(object):
     '''
@@ -77,6 +78,7 @@ class Simulation(object):
         self.next_person_id = 0
         self.vacc_percentage = vacc_percentage
         self.initial_infected = initial_infected
+        self.virus = virus
         self.virus_name = virus.name
         self.virus_mortality_rate = virus.mortality_rate
         self.virus_basic_repro_num = virus.basic_repro_num
@@ -190,7 +192,17 @@ class Simulation(object):
             #           - Else:
             #               - Call simulation.interaction(person, random_person)
             #               - Increment interaction counter by 1.
-            pass
+            # At the end of each time step, we'll call
+            # self._infect_newly_infected() and then reset .newly_infected back to an empty
+            # list.
+            interaction = 0
+            for sick_person in self.newly_infected:
+                rand_person = random.choice(self.population)
+                if rand_person.is_alive:
+                    self.interaction(sick_person, rand_person)
+                    interaction += 1
+            self._infect_newly_infected()
+            self.newly_infected = []
 
     def interaction(self, person, random_person):
         # TODO: Finish this method! This method should be called any time two living
@@ -211,7 +223,18 @@ class Simulation(object):
             #     Simulation object's newly_infected array, so that their .infected
             #     attribute can be changed to True at the end of the time step.
         # TODO: Remember to call self.logger.log_interaction() during this method!
-        pass
+        if random_person.is_vaccinated or random_person.infected != None:
+            self.logger.log_interaction(person, random_person, False)
+            return
+        elif not random_person.is_vaccinated:
+            random_num = float('{0:.2f}'.format(random.random()))
+            if random_num < self.virus_basic_repro_num:
+                self.newly_infected.append(random_person._id)
+                random_person.is_infected = self.virus
+                self.logger.log_interaction(person, random_person)
+            else:
+                self.logger.log_interaction(person, random_person, False)
+
 
     def _infect_newly_infected(self):
         # TODO: Finish this method! This method should be called at the end of
@@ -223,19 +246,27 @@ class Simulation(object):
         #   - Set this Person's .infected attribute to True.
         # NOTE: Once you have iterated through the entire list of self.newly_infected, remember
         # to reset self.newly_infected back to an empty list!
-        pass
+        for person in self.newly_infected:
+            index = self.population.index(person)
+            self.population[index].infected = self.virus
+        self.newly_infected = []
 
 if __name__ == "__main__":
-    params = sys.argv[1:]
-    pop_size = int(params[0])
-    vacc_percentage = float(params[1])
-    virus_name = str(params[2])
-    mortality_rate = float(params[3])
-    basic_repro_num = float(params[4])
-    if len(params) == 6:
-        initial_infected = int(params[5])
-    else:
-        initial_infected = 1
-    simulation = Simulation(pop_size, vacc_percentage, virus_name, mortality_rate,
-                            basic_repro_num, initial_infected)
+    # params = sys.argv[1:]
+    # pop_size = int(params[0])
+    # vacc_percentage = float(params[1])
+    # virus_name = str(params[2])
+    # mortality_rate = float(params[3])
+    # basic_repro_num = float(params[4])
+
+    pop_size = 20
+    vacc_percentage = 0.2
+    ebola = Virus('ebola', 0.7, 2.5)
+    initial_infected = 3
+
+    # if len(params) == 6:
+    #     initial_infected = int(params[5])
+    # else:
+    #     initial_infected = 1
+    simulation = Simulation(pop_size, vacc_percentage, ebola, initial_infected)
     simulation.run()
