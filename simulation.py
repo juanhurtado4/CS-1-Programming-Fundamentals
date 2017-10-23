@@ -96,8 +96,7 @@ class Simulation(object):
         self.newly_infected = []
         # TODO: Call self._create_population() and pass in the correct parameters.
         # Store the array that this method will return in the self.population attribute.
-        self.population.append(self._create_population()) # TODO: DO NOT FORGET to input
-        #                                                         correct parameters for func
+        self.population.append(self._create_population(self.initial_infected))
 
     def _create_population(self, initial_infected):
         # TODO: Finish this method!  This method should be called when the simulation
@@ -144,7 +143,12 @@ class Simulation(object):
         #     - The entire population is dead.
         #     - There are no infected people left in the population.
         # In all other instances, the simulation should continue.
-        pass
+        for person in self.population:
+            if person.infected != None:
+                return True
+            elif person.is_alive:
+                return True
+        return False
 
     def run(self):
         # TODO: Finish this method.  This method should run the simulation until
