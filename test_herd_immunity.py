@@ -64,5 +64,4 @@ def test_create_population():
     vacc_percentage = 0.2
     logger = Logger('result_log.txt')
     simulation = Simulation(population_size, vacc_percentage, ebola)
-    # assert simulation._create_population(simulation.initial_infected) == population_size
-    assert simulation._create_population(simulation.initial_infected) == None
+    assert simulation._create_population(simulation.initial_infected) == population_size

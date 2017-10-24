@@ -4,6 +4,7 @@ from person import Person
 from logger import Logger
 from virus import Virus
 
+# TODO: Check if .infected is changed after death. If not then change if logic in simulation should continue func
 class Simulation(object):
     '''
     Main class that will run the herd immunity simulation program.  Expects initialization
@@ -112,11 +113,11 @@ class Simulation(object):
         # population = []
         population = 0
         infected_count = 0
-        debugging_count = 0 # DON'T FORGET TO DELETE THIS TESTING VAR
+        # debugging_count = 0 # DON'T FORGET TO DELETE THIS TESTING VAR
         while population != self.population_size:
-            if debugging_count > 20:
-                break
-            debugging_count += 1 # DON'T FORGET TO DELETE THIS TESTING VAR
+            # if debugging_count > 20:
+                # break
+            # debugging_count += 1 # DON'T FORGET TO DELETE THIS TESTING VAR
             if infected_count !=  initial_infected:
                 # TODO: Create all the infected people first, and then worry about the rest.
                 # Don't forget to increment infected_count every time you create a
@@ -125,7 +126,8 @@ class Simulation(object):
                 infected_count += 1
                 self.next_person_id += 1
                 self.population.append(sick_person)
-                self.newly_infected.append(sick_person._id)
+                # self.newly_infected.append(sick_person._id)
+                self.newly_infected.append(sick_person)
                 population += 1
             else:
                 # Now create all the rest of the people.
@@ -160,13 +162,15 @@ class Simulation(object):
         #     - There are no infected people left in the population.
         # In all other instances, the simulation should continue.
         # print('this is population', self.population) # DEBUGGING DO NOT FORGET TO DELETE
-        print('THIS IS LENGTH', len(self.population))
         for person in self.population:
             # print('this is person:', person) # DEBUGGING DO NOT FORGET TO DELETE
             if person.infected != None:
+                print('first one should be true:', True) # DEBUGGING DO NOT FORGET TO DELETE
                 return True
             elif person.is_alive:
+                print('second one should be true:', True) # DEBUGGING DO NOT FORGET TO DELETE
                 return True
+        print('Third one should be false:', False) # DEBUGGING DO NOT FORGET TO DELETE
         return False
 
     def run(self):
@@ -184,13 +188,17 @@ class Simulation(object):
         # TODO: Remember to set this variable to an intial call of
         # self._simulation_should_continue()!
         should_continue = self._simulation_should_continue()
+        # debugging_count = 0 # DON'T FORGET TO DELETE THIS TESTING VAR
         while should_continue:
+            # if debugging_count > 20:
+            #     break
+            # debugging_count += 1 # DON'T FORGET TO DELETE THIS TESTING VAR
         # TODO: for every iteration of this loop, call self.time_step() to compute another
         # round of this simulation.  At the end of each iteration of this loop, remember
         # to rebind should_continue to another call of self._simulation_should_continue()!
-            self.time_step
+            self.time_step()
             time_step_counter += 1
-            self.logger.log_time_step(time_step_counter)
+            self.logger.log_time_step(time_step_counter) # GO THROUGH THIS LOGIC
             should_continue = self._simulation_should_continue()
         print('The simulation has ended after {time_step_counter} turns.'.format(time_step_counter=time_step_counter))
 
@@ -223,7 +231,7 @@ class Simulation(object):
         # people are selected for an interaction.  That means that only living people
         # should be passed into this method.  Assert statements are included to make sure
         # that this doesn't happen.
-        assert person1.is_alive == True
+        assert person.is_alive == True
         assert random_person.is_alive == True
 
         # The possible cases you'll need to cover are listed below:
@@ -243,7 +251,8 @@ class Simulation(object):
         elif not random_person.is_vaccinated:
             random_num = float('{0:.2f}'.format(random.random()))
             if random_num < self.virus_basic_repro_num:
-                self.newly_infected.append(random_person._id)
+                # self.newly_infected.append(random_person._id)
+                self.newly_infected.append(random_person)
                 random_person.is_infected = self.virus
                 self.logger.log_interaction(person, random_person)
             else:
