@@ -76,7 +76,8 @@ class Logger(object):
             log = '{}\t{}\t{}\t{}\t{}\n'.format(population_size, vacc_percentage,
                                                 virus.name, virus.mortality_rate, virus.basic_repro_num)
             file.write(log)
-
+        return log
+    
     def log_interaction(self, person1, person2, did_infect=None):
         # TODO: Finish this method.  The Simulation object should use this method to
         # log every interaction a sick individual has during each time step.  This method

@@ -30,4 +30,8 @@ def test_write_metadata():
     population_size = 10
     vacc_percentage = 0.2
     logger = Logger('hello')
+    ebola = Virus('ebola', 0.7, 2.5)
     assert logger.write_metadata(10, 0.2, ebola) == '10\t0.2\tebola\t0.7\t2.5\n'
+
+# def test_create_population():
+#     simulation = Simulation()
