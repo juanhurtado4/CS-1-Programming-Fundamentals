@@ -57,6 +57,8 @@ class Person():
         # for resolve_infection.  If person dies, set is_alive to False and return False.
         # If person lives, set is_vaccinated = True, infected = None, return True.
         random_num = float('{0:.2f}'.format(random.random()))
+        if self.infected == None:
+            return True
         if random_num < self.infected.mortality_rate:
             self.is_alive = False
             return False

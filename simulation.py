@@ -83,6 +83,7 @@ class Simulation(object):
         self.virus_name = virus.name
         self.virus_mortality_rate = virus.mortality_rate
         self.virus_basic_repro_num = virus.basic_repro_num
+        self.dead = []
         self.file_name = "{}_simulation_pop_{}_vp_{}_infected_{}.txt".format(
             self.virus_name, population_size, vacc_percentage, self.initial_infected)
 
@@ -91,6 +92,7 @@ class Simulation(object):
         # logger object to log all events of any importance during the simulation.  Don't forget
         # to call these logger methods in the corresponding parts of the simulation!
         self.logger = Logger('result_log.txt')
+        self.logger.write_metadata(self.population_size, self.vacc_percentage, self.virus)
 
         # This attribute will be used to keep track of all the people that catch
         # the infection during a given time step. We'll store each newly infected
@@ -162,16 +164,34 @@ class Simulation(object):
         #     - There are no infected people left in the population.
         # In all other instances, the simulation should continue.
         # print('this is population', self.population) # DEBUGGING DO NOT FORGET TO DELETE
+        alive_count = 0
+        vacc_count = 0
         for person in self.population:
             # print('this is person:', person) # DEBUGGING DO NOT FORGET TO DELETE
-            if person.infected != None:
-                print('first one should be true:', True) # DEBUGGING DO NOT FORGET TO DELETE
-                return True
+            # if person.infected != None:
+            if person.infected == None:
+                vacc_count += 1
             elif person.is_alive:
-                print('second one should be true:', True) # DEBUGGING DO NOT FORGET TO DELETE
-                return True
-        print('Third one should be false:', False) # DEBUGGING DO NOT FORGET TO DELETE
-        return False
+                alive_count += 1
+            # elif person.is_alive:
+            #     print('second one should be true:', True) # DEBUGGING DO NOT FORGET TO DELETE
+            #     count += 1
+        # print('Third one should be false:', False) # DEBUGGING DO NOT FORGET TO DELETE
+        if vacc_count >= len(self.population):
+            return False
+        if alive_count >= len(self.population):
+            return False
+        else:
+            return True
+        # return False
+
+
+    def did_die_from_infection(self):
+        for person in self.population:
+            person.did_survive_infection()
+            if not person.is_alive:
+                index = self.population.index(person)
+                self.population.remove(person)
 
     def run(self):
         # TODO: Finish this method.  This method should run the simulation until
@@ -188,17 +208,19 @@ class Simulation(object):
         # TODO: Remember to set this variable to an intial call of
         # self._simulation_should_continue()!
         should_continue = self._simulation_should_continue()
-        # debugging_count = 0 # DON'T FORGET TO DELETE THIS TESTING VAR
+        debugging_count = 0 # DON'T FORGET TO DELETE THIS TESTING VAR
         while should_continue:
-            # if debugging_count > 20:
-            #     break
-            # debugging_count += 1 # DON'T FORGET TO DELETE THIS TESTING VAR
+            # if debugging_count > 5000:
+                # break
+            debugging_count += 1 # DON'T FORGET TO DELETE THIS TESTING VAR
         # TODO: for every iteration of this loop, call self.time_step() to compute another
         # round of this simulation.  At the end of each iteration of this loop, remember
         # to rebind should_continue to another call of self._simulation_should_continue()!
             self.time_step()
             time_step_counter += 1
-            self.logger.log_time_step(time_step_counter) # GO THROUGH THIS LOGIC
+            self.logger.log_time_step(time_step_counter)
+            simulation.did_die_from_infection()
+            self.logger.log_infection_survival(self.population)
             should_continue = self._simulation_should_continue()
         print('The simulation has ended after {time_step_counter} turns.'.format(time_step_counter=time_step_counter))
 
@@ -256,6 +278,8 @@ class Simulation(object):
                 random_person.is_infected = self.virus
                 self.logger.log_interaction(person, random_person)
             else:
+                random_person.infected = None
+                random_person.is_vaccinated = True
                 self.logger.log_interaction(person, random_person, False)
 
 
@@ -282,8 +306,8 @@ if __name__ == "__main__":
     # mortality_rate = float(params[3])
     # basic_repro_num = float(params[4])
 
-    pop_size = 20
-    vacc_percentage = 0.2
+    pop_size = 100
+    vacc_percentage = 0
     ebola = Virus('ebola', 0.7, 2.5)
     initial_infected = 3
 
